@@ -23,6 +23,11 @@ $( document ).ready(function(){
   let playerCount=0;
 
 
+  var d = new Date();
+
+  console.log('TIME', d)
+
+
 
 $('.listFull').hide();
 
@@ -69,6 +74,7 @@ db.ref().on("child_added", function(childSnapshot){
 
 function checkLimit(){
   console.log('players', players)
+  // players.length = 10;
   if (players.length == 10){
     $('.listFull').show();
     $('#formDiv').hide()
