@@ -1,7 +1,7 @@
   //Your web app's Firebase configuration 
 $( document ).ready(function(){
 
-
+//FIREBASE
   var firebaseConfig = {
     apiKey: "AIzaSyCr9oczno46O1MykSGRoM_awKlGc20_IMk",
     authDomain: "soccer-wed.firebaseapp.com",
@@ -18,19 +18,21 @@ $( document ).ready(function(){
 
   let db = firebase.database();
 
+//GLOBAL VAR
   let list = $('#list');
   let players = [];
   let playerCount=0;
 
 
-  var d = new Date();
+  // var d = new Date();
 
-  console.log('TIME', d)
+  // console.log('TIME', d)
 
 
-
+//HIDE LIST FULL DIV
 $('.listFull').hide();
 
+//ON SUBMIT FORM
 $('#submit').on('click', function(){
     
     event.preventDefault()
@@ -56,12 +58,13 @@ $('#submit').on('click', function(){
 });
 
 
+//FIREBASE PULL DATA
 db.ref().on("child_added", function(childSnapshot){
   let player = {
     firstName: '',
     lastName: ''
   }
-    console.log('child', childSnapshot.val())
+
     player.firstName = childSnapshot.val().first;
     player.lastName = childSnapshot.val().last;
     playerCount++;
@@ -72,14 +75,14 @@ db.ref().on("child_added", function(childSnapshot){
 
 });
 
+
+//CHECK IF LIST IS FULL
 function checkLimit(){
-  console.log('players', players)
   // players.length = 10;
   if (players.length == 10){
     $('.listFull').show();
     $('#formDiv').hide()
   }
-
 }
 
 });

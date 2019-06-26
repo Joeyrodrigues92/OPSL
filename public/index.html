@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Soccer On Wednesday</title>
+
+   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> 
+   <link rel="stylesheet" type="css" href="/style.css">
+
+
+</head>
+
+<body style='background-color: #86b740'>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Tino's Open Soccer League</h1>
+            <p class="lead">Please fill out the form to be placed on the players list.</p>
+            <p class="lead">Once list has 28, the sign-up form will close.</p>
+            <h3>Next Game Day : Wednesday June 26 2019, 8:00pm</h3>
+            <p>Please arrive 15 mins early</p>
+        </div>
+    </div>
+    
+    <div class="container">
+            <div class="row">
+                    <div class='listFull'>
+                    <h1>Players List is full</h1>
+                </div>
+            </div>   
+        <div class="row">
+            <div id='formDiv' class="col-6">
+                <form class='form'> 
+                    <div class="form-group" >
+                        <input type="firstName" class="form-control" id="firstName" aria-describedby="emailHelp" placeholder="First Name">
+                    </div>
+                    <div class="form-group" >
+                        <input type="lastName" class="form-control" id="lastName" placeholder="Last Name" required>
+                    </div>
+                    <button id='submit' type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <div class="col-6" id='list'  style='height: 400px; overflow-y:scroll'></div>
+        </div>
+    </div>
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+   
+    <!-- BOOTSTRAP -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>  
+    
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Javascript file -->
+    <script type='text/javascript'>
+    $('.listFull').hide();
+
+
+    //might need to make a global players array, so when you submit adn players reach limit form disappears
+
+//WRITING NEW PLAYER FOR FIREBASE
+    $('#submit').on('click', (event)=>{
+        event.preventDefault();
+        //validate form
+        function validateForm() {
+            var isValid = true;
+            $(".form-control").each(function() {
+            if ($(this).val() === "") {
+                isValid = false;
+            }
+        });
+
+            return isValid;
+        } //end validateForm
+
+
+
+        if (validateForm()) {
+        // Create an object for the user"s data
+        var userData = {
+          first: $("#firstName").val(),
+          last: $("#lastName").val(),
+        };
+        
+        // AJAX post the data to the friends API.
+        $.post("/api/players", userData);
+        $('#firstName').val('');
+        $('#lastName').val('');
+        }else {
+            alert("Please fill out all fields before submitting!");
+        }
+        location.reload();
+    })//End onClick
+
+
+
+
+
+//READING FIREBASE FOR PLAYERS WHO HAVE SIGNED UP
+    $.ajax({ url: "/api/players", method: "GET" })
+      .then(function(players) {
+          console.log(players.length)
+
+        if (players.length >= 10){
+            console.log('full')
+            players.map((p)=>{
+            $('#list').append('<p>' + p.first + ' ' + p.last + '</p>')
+          })
+            $('#formDiv').hide();
+            $('.listFull').show();
+            
+        }else{
+          players.map((p)=>{
+            $('#list').append('<p>' + p.first + ' ' + p.last + '</p>')
+          })
+        }
+
+      });
+
+    </script>
+</body>
+</html>

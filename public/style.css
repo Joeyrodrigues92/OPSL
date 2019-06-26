@@ -1,0 +1,9 @@
+/* STYLE SHEET FOR INDEX.HTML */
+body{
+    background-color: #86b740
+}
+
+.form{
+    border: 5px solid black; 
+    padding: 5px
+}
